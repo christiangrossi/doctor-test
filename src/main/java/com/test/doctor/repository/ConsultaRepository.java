@@ -13,6 +13,9 @@ import com.test.doctor.model.Consultorio;
 
 @Repository
 public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
+	
+	@Query("select c from Consulta c where c.dataConsulta BETWEEN :start AND :end")
+	List<Consulta> encontrarConsultasEntreDuasDatas(@Param("start") Date start, @Param("end") Date end);
 
 	@Query("select c from Consulta c where c.nomePaciente=:nome and c.dataConsulta BETWEEN :start AND :end")
 	List<Consulta> encontrarConsultasPorPacienteEntreDuasDatas(@Param("start") Date start, @Param("end") Date end,
@@ -25,5 +28,6 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Integer> {
 	@Query("select count(c) from Consulta c where c.consultorio=:consultorio and c.dataConsulta BETWEEN :start AND :end")
 	long numConsultasConsultorio(@Param("consultorio") Consultorio consultorio, @Param("start") Date start,
 			@Param("end") Date end);
-
+	
+	List<Consulta>findAllByOrderByDataConsultaDesc();
 }

@@ -13,29 +13,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.doctor.model.Medico;
-import com.test.doctor.service.MedicoService;
+import com.test.doctor.model.Consultorio;
+import com.test.doctor.service.ConsultorioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "/medicos")
-public class MedicoController {
+@RequestMapping(value = "/consultorios")
+public class ConsultorioController {
 
 	@Autowired
-	private MedicoService service;
+	private ConsultorioService service;
 
-	@GetMapping(value = "/")
-	public ResponseEntity<List<Medico>> listar() {
+	@GetMapping()
+	public ResponseEntity<List<Consultorio>> listar() {
 		return ResponseEntity.ok(service.list());
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Medico> buscar(@PathVariable Integer id) {
+	public ResponseEntity<Consultorio> buscar(@PathVariable Integer id) {
 		return ResponseEntity.ok(service.find(id));
 	}
 	
 	@PostMapping(value = "/{id}")
-	public ResponseEntity<Medico> cadastrar(@RequestBody Medico obj) {
-		return new ResponseEntity<Medico>(service.insert(obj), HttpStatus.CREATED);
+	public ResponseEntity<Consultorio> cadastrar(@RequestBody Consultorio obj) {
+		return new ResponseEntity<Consultorio>(service.insert(obj), HttpStatus.CREATED);
 	}
 }

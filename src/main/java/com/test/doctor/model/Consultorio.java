@@ -22,6 +22,13 @@ public class Consultorio implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public Consultorio() {
+	}
+	
+	public Consultorio(Integer id) {
+		this.id = id;
+	}
 
 	@Override
 	public int hashCode() {

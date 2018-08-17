@@ -1,6 +1,9 @@
 package com.test.doctor.controller;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.doctor.model.Consulta;
+import com.test.doctor.model.dto.ConsultaDTO;
 import com.test.doctor.service.ConsultaService;
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/consultas")
 public class ConsultaController {
 
@@ -33,9 +38,9 @@ public class ConsultaController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Consulta> cadastrar(@RequestBody Consulta obj) {
-		//System.err.println("Data da consulta enviada:");
-		//System.err.println(obj.getDataConsulta());
-		return new ResponseEntity<Consulta>(service.insert(obj), HttpStatus.CREATED);
+	public ResponseEntity<Consulta> cadastrar(@Valid @RequestBody ConsultaDTO obj) {
+		System.err.println(new Date());
+		Consulta consulta = service.fromDTO(obj);
+		return new ResponseEntity<Consulta>(service.insert(consulta), HttpStatus.CREATED);
 	}
 }

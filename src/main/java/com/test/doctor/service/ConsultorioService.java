@@ -7,31 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.test.doctor.model.Medico;
-import com.test.doctor.repository.MedicoRepository;
+import com.test.doctor.model.Consultorio;
+import com.test.doctor.repository.ConsultorioRepository;
 import com.test.doctor.service.exception.ObjectNotFoundException;
 
 @Service
-public class MedicoService {
+public class ConsultorioService {
 	@Autowired
-	private MedicoRepository repository;
+	private ConsultorioRepository repository;
 
-	public List<Medico> list() {
-		return repository.findAllByOrderByNome();
+	public List<Consultorio> list() {
+		return repository.findAll();
 	}
 
-	public Medico find(Integer id) {
-		Optional<Medico> obj = repository.findById(id);
+	public Consultorio find(Integer id) {
+		Optional<Consultorio> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Medico.class.getName()));
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Consultorio.class.getName()));
 
 	}
 
-	public Medico insert(Medico obj) {
+	public Consultorio insert(Consultorio obj) {
 		return repository.save(obj);
 	}
 
-	public Medico update(Medico obj) {
+	public Consultorio update(Consultorio obj) {
 		return repository.save(obj);
 	}
 
@@ -40,7 +40,7 @@ public class MedicoService {
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Não é possível excluir um médico com consultas associadas");
+			throw new DataIntegrityViolationException("Não é possível excluir um consultório com consultas associadas");
 		}
 
 	}
