@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import com.test.doctor.model.Consulta;
 import com.test.doctor.model.Consultorio;
 import com.test.doctor.model.dto.ConsultaDTO;
 import com.test.doctor.repository.ConsultaRepository;
+import com.test.doctor.service.exception.DataIntegrityException;
 import com.test.doctor.service.exception.ObjectNotFoundException;
 import com.test.doctor.service.exception.RegistrationPermissionDeniedException;
 import com.test.doctor.service.utils.UtilsData;
+import com.test.doctor.service.validator.ValidadorDeConsulta;
 
 @Service
 public class ConsultaService {
@@ -33,16 +36,8 @@ public class ConsultaService {
 	}
 
 	public Consulta insert(Consulta obj) {
-		try {
-			consultorioEstaDisponivelParaMaisConsultas(obj);
-			pacienteJaTemConsultaMarcadaParaHoje(obj);
-			consultaRespeitaIntervaloDeQuinzeMinutos(obj);
-			verificarDisponibilidadeDoConsultorio(obj);
+			new ValidadorDeConsulta(obj, repository).aplicarRegras();
 			return repository.save(obj);
-		
-		} catch(RegistrationPermissionDeniedException e) {
-			throw new RegistrationPermissionDeniedException(e.getMessage());
-		}
 	}
 
 	public Consulta update(Consulta obj) {
@@ -51,11 +46,11 @@ public class ConsultaService {
 
 	public void delete(Integer id) {
 		find(id);
-//		try {
+		try {
 		repository.deleteById(id);
-//		} catch (DataIntegrityViolationException e) {
-//			throw new DataIntegrityViolationException("Não é possível excluir um médico com consultas associadas");
-//		}
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir um médico com consultas associadas");
+		}
 
 	}
 

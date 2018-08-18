@@ -45,11 +45,12 @@ public class ConsultaInsertValidator implements ConstraintValidator<ConsultaInse
 		Integer urlId = Integer.parseInt(map.get("id"));
 
 		List<FieldMessage> list = new ArrayList<>();
-//
-//		Cliente aux = repository.findByEmail(objDto.getEmail());
-//		if (aux != null &&! aux.getId().equals(urlId)) {
-//			list.add(new FieldMessage("email", "Esse endereço de e-mail já está sendo utilizado"));
-//		}
+		
+		
+//		consultorioEstaDisponivelParaMaisConsultas(obj);
+//		pacienteJaTemConsultaMarcadaParaHoje(obj);
+//		consultaRespeitaIntervaloDeQuinzeMinutos(obj);
+//		verificarDisponibilidadeDoConsultorio(obj);
 
 		// inclua os testes aqui, inserindo erros na lista
 		for (FieldMessage e : list) {
@@ -60,7 +61,7 @@ public class ConsultaInsertValidator implements ConstraintValidator<ConsultaInse
 		return list.isEmpty();
 	}
 
-	private void consultorioEstaDisponivelParaMaisConsultas(Consulta consulta) {
+	private void consultorioEstaDisponivelParaMaisConsultas(ConsultaDTO consulta) {
 		Date dataIni = UtilsData.dataComHoraInicial(consulta.getDataConsulta()).getData();
 		Date dataFin = UtilsData.dataComHoraFinal(consulta.getDataConsulta()).getData();
 		if (!(repository.numConsultasConsultorio(consulta.getConsultorio(), dataIni, dataFin) < limiteDeConsultas)) {
