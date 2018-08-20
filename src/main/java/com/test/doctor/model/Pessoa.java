@@ -27,6 +27,12 @@ public class Pessoa {
 		this.nome = nome;
 		this.idade = idade;
 	}
+	
+	public Pessoa(Integer id, String nome, Integer idade) {
+		this.id = id;
+		this.nome = nome;
+		this.idade = idade;
+	}
 
 	public Integer getId() {
 		return id;

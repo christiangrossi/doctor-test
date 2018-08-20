@@ -3,16 +3,21 @@ package com.test.doctor.service.validator;
 import java.util.Date;
 import java.util.List;
 
+import com.test.doctor.dto.ConsultaDTO;
 import com.test.doctor.model.Consulta;
 import com.test.doctor.repository.ConsultaRepository;
 import com.test.doctor.service.utils.UtilsData;
 
-public class ReservaDeConsultorioValidator implements ConsultaValidator {
+public class ReservaDeConsultorioValidator extends ConsultaValidator {
+	
 
-	private ConsultaValidator proximo;
+
+	ReservaDeConsultorioValidator(ConsultaDTO consulta, ConsultaRepository repository) {
+		super(consulta, repository);
+	}
 
 	@Override
-	public void validar(Consulta consulta, ConsultaRepository repository) {
+	public void validar() {
 		Date dataIni = UtilsData.dataComHoraInicial(consulta.getDataConsulta()).getData();
 		Date dataFin = UtilsData.dataComHoraFinal(consulta.getDataConsulta()).getData();
 		List<Consulta> consultas = repository.encontrarConsultasEntreDuasDatas(dataIni, dataFin);
@@ -33,15 +38,6 @@ public class ReservaDeConsultorioValidator implements ConsultaValidator {
 				}
 			}
 		});
-		
-		proximo.validar(consulta, repository);
 
 	}
-
-	@Override
-	public void setProximo(ConsultaValidator proximo) {
-		this.proximo = proximo;
-
-	}
-
 }

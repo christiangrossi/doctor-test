@@ -1,7 +1,7 @@
 package com.test.doctor.controller;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.test.doctor.dto.ConsultaDTO;
 import com.test.doctor.model.Consulta;
-import com.test.doctor.model.dto.ConsultaDTO;
 import com.test.doctor.service.ConsultaService;
 
 @RestController
@@ -28,8 +28,10 @@ public class ConsultaController {
 	private ConsultaService service;
 
 	@GetMapping(value = "")
-	public ResponseEntity<List<Consulta>> listar() {
-		return ResponseEntity.ok(service.list());
+	public ResponseEntity<List<ConsultaDTO>> listar() {
+		List<Consulta> consultas = service.list();
+		List<ConsultaDTO> consultasDTO = consultas.stream().map(c -> new ConsultaDTO(c)).collect(Collectors.toList());
+		return ResponseEntity.ok(consultasDTO);
 	}
 
 	@GetMapping(value = "/{id}")
@@ -38,9 +40,8 @@ public class ConsultaController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Consulta> cadastrar(@Valid @RequestBody ConsultaDTO obj) {
-		System.err.println(new Date());
-		Consulta consulta = service.fromDTO(obj);
-		return new ResponseEntity<Consulta>(service.insert(consulta), HttpStatus.CREATED);
+	public ResponseEntity<ConsultaDTO> cadastrar(@Valid @RequestBody ConsultaDTO obj) {
+		return new ResponseEntity<ConsultaDTO>(
+				new ConsultaDTO(service.insert(ConsultaDTO.toConsulta(obj))), HttpStatus.CREATED);
 	}
 }

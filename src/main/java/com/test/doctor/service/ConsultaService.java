@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.test.doctor.dto.ConsultaDTO;
 import com.test.doctor.model.Consulta;
-import com.test.doctor.model.Consultorio;
-import com.test.doctor.model.dto.ConsultaDTO;
 import com.test.doctor.repository.ConsultaRepository;
 import com.test.doctor.service.exception.DataIntegrityException;
 import com.test.doctor.service.exception.ObjectNotFoundException;
@@ -31,7 +30,7 @@ public class ConsultaService {
 	}
 
 	public Consulta insert(Consulta obj) {
-			new ValidadorDeConsulta(obj, repository).aplicarRegras();
+			new ValidadorDeConsulta(new ConsultaDTO(obj), repository).aplicarRegras();
 			return repository.save(obj);
 	}
 
@@ -46,12 +45,6 @@ public class ConsultaService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir um médico com consultas associadas");
 		}
-
-	}
-
-	public Consulta fromDTO(ConsultaDTO dto) {
-		return new Consulta(dto.getNomePaciente(), dto.getEspecialidadeMedica(), dto.getMedico(),
-				new Consultorio(dto.getConsultorio().getId()), dto.getDataConsulta());
 	}
 
 }
